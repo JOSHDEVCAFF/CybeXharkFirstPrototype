@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="letter-c.png" type="image/x-icon">
+    <title>Payment - Cybexhark</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styles */
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;    
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0.7) 50%), url('gym.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            height: 100vh;
+            color: #fff;
+        }
+        /* Payment and Delivery Form Styles */
+        .payment-container {
+            width: 80%;
+            max-width: 600px;
+            margin:auto;
+            background: rgba(0, 0, 0, 0.863);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow:20px 20px 40px rgb(0, 0, 0);
+            margin-top: 100px;
+        }
+
+        .payment-container h2 {
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 30px;
+        }
+
+        /* Delivery Form Styles */
+        .delivery-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            color: rgba(255, 255, 255, 0.493);
+            
+            
+        }
+
+        .delivery-form input[type="text"], 
+        .delivery-form input[type="number"] {
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            width: 100%; 
+
+            box-shadow: 5px 5px 10px rgb(0, 0, 0);
+        }
+
+        .delivery-form textarea {
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            width: 100%;
+            height: 100px;
+            resize: none;
+            box-shadow: 5px 5px 10px rgb(0, 0, 0);
+        }
+
+        .delivery-form button {
+            background-color: #333;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .delivery-form button:hover {
+            background-color: darkred;
+            transform: translateY(-3px);
+        }
+
+        /* Payment Form Styles */
+        .payment-form {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+        .payment-form input[type="text"], 
+        .payment-form input[type="number"], 
+        .payment-form input[type="date"], 
+        .payment-form input[type="email"] {
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            width: 100%;
+            box-shadow: 5px 5px 10px rgb(0, 0, 0);
+        }
+
+        .payment-form button {
+            background-color: #333;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .payment-form button:hover {
+            background-color: darkred;
+            transform: translateY(-3px);
+        }
+
+        /* Transaction Result Section */
+        .transaction-result {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .transaction-result h3 {
+            color: #fff;
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+        .transaction-result p {
+            color: #fff;
+        }
+
+        /* Back to Shop Button */
+        .back-to-shop-btn {
+            background-color: #333;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .back-to-shop-btn:hover {
+            background-color: darkred;
+            transform: translateY(-3px);
+        }
+        ::placeholder{
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        #deliver{
+            color: #ffffff83;
+        }
+        .transaction-result{
+            box-shadow: 10px 10 20px color(black);
+        }
+        .icons{
+    text-align: center;
+    word-spacing: 30px;
+        }
+
+        :root {
+            color-scheme: dark;
+            --payment-accent: #ef3434;
+            --payment-muted: #aeb3bb;
+        }
+
+        html {
+            min-width: 320px;
+        }
+
+        body {
+            min-height: 100vh;
+            height: auto;
+            padding: 1px 16px 40px;
+            background:
+                linear-gradient(180deg, rgba(8, 9, 11, 0.86), #0b0c0f 42rem),
+                url('gym.jpg') center top / cover fixed;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .payment-container {
+            width: min(100%, 600px);
+            margin: 64px auto 0;
+            padding: clamp(22px, 5vw, 38px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            background: linear-gradient(145deg, rgba(30, 33, 38, 0.97), rgba(15, 17, 20, 0.97));
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
+        }
+
+        .payment-container h2 {
+            margin-bottom: 10px;
+            color: #fff;
+            font-size: clamp(1.8rem, 5vw, 2.3rem);
+            letter-spacing: -0.055em;
+        }
+
+        .payment-intro {
+            margin-bottom: 24px;
+            color: var(--payment-muted);
+            font-size: 0.92rem;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .payment-eyebrow {
+            margin-bottom: 8px;
+            color: var(--payment-accent);
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.2em;
+        }
+
+        .payment-progress {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 0 0 26px;
+        }
+
+        .payment-progress span {
+            padding: 11px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 9px;
+            background: rgba(255, 255, 255, 0.04);
+            color: #818791;
+            font-size: 0.76rem;
+            font-weight: 750;
+            text-align: center;
+        }
+
+        .payment-progress span[aria-current="step"] {
+            border-color: rgba(239, 52, 52, 0.65);
+            background: rgba(239, 52, 52, 0.12);
+            color: #ff8585;
+        }
+
+        .payment-container label {
+            color: #e2e4e8;
+            font-size: 0.84rem;
+            font-weight: 700;
+        }
+
+        .delivery-form,
+        .payment-form {
+            gap: 10px;
+            color: #fff;
+        }
+
+        .delivery-form input[type="text"],
+        .delivery-form input[type="number"],
+        .delivery-form textarea,
+        .payment-form input[type="text"],
+        .payment-form input[type="number"],
+        .payment-form input[type="date"],
+        .payment-form input[type="email"] {
+            width: 100%;
+            min-height: 46px;
+            padding: 12px 13px;
+            border: 1px solid rgba(255, 255, 255, 0.13);
+            border-radius: 9px;
+            background: #111317;
+            box-shadow: none;
+            color: #fff;
+            font: inherit;
+            font-size: 0.92rem;
+            color-scheme: dark;
+        }
+
+        .delivery-form textarea {
+            height: 96px;
+            resize: vertical;
+        }
+
+        .delivery-form input::placeholder,
+        .delivery-form textarea::placeholder,
+        .payment-form input::placeholder {
+            color: #777d86;
+        }
+
+        .delivery-form input:focus,
+        .delivery-form textarea:focus,
+        .payment-form input:focus {
+            border-color: var(--payment-accent);
+            outline: 3px solid rgba(239, 52, 52, 0.18);
+        }
+
+        #deliver {
+            margin: 3px 0 6px;
+            color: var(--payment-muted);
+            font-size: 0.82rem;
+        }
+
+        .delivery-form button,
+        .payment-form button,
+        .back-to-shop-btn {
+            width: 100%;
+            min-height: 48px;
+            margin: 8px 0 0;
+            padding: 12px 18px;
+            border: 1px solid var(--payment-accent);
+            border-radius: 9px;
+            background: var(--payment-accent);
+            color: #fff;
+            font-size: 0.94rem;
+            font-weight: 800;
+        }
+
+        .delivery-form button:hover,
+        .payment-form button:hover,
+        .back-to-shop-btn:hover {
+            transform: translateY(-2px);
+            background: #c9272d;
+        }
+
+        .icons {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 5px 0;
+            word-spacing: normal;
+        }
+
+        .icons img {
+            width: auto;
+            max-width: 100px;
+            height: 34px;
+            padding: 4px 8px;
+            border-radius: 7px;
+            background: #fff;
+            object-fit: contain;
+        }
+
+        .transaction-result {
+            margin-top: 10px;
+            padding: 24px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.04);
+            box-shadow: none;
+        }
+
+        .transaction-result h3 {
+            margin: 0 0 12px;
+            color: #fff;
+            font-size: 1.3rem;
+            text-shadow: none !important;
+        }
+
+        .transaction-result p {
+            margin-bottom: 10px;
+            color: var(--payment-muted);
+            line-height: 1.6;
+        }
+
+        .transaction-result #deliver {
+            color: #ff8585;
+        }
+
+        .payment-container :is(button, input, textarea):focus-visible {
+            outline: 3px solid #fff;
+            outline-offset: 3px;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding-right: 12px;
+                padding-left: 12px;
+            }
+
+            .payment-container {
+                margin-top: 28px;
+                border-radius: 15px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                transition-duration: 0.01ms !important;
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="cybex-theme.css">
+</head>
+<body>
+
+    <div class="main">
+        <div class="payment-container">
+            <p class="payment-eyebrow" style="text-align: center;">SECURE CHECKOUT</p>
+            <h2>Payment Information</h2>
+            <p class="payment-intro">Complete this demo checkout to add your order to your dashboard. This prototype does not process or charge real payments.</p>
+            <div class="payment-progress" aria-label="Checkout progress">
+                <span id="delivery-step" aria-current="step">1&nbsp; Delivery</span>
+                <span id="payment-step">2&nbsp; Payment</span>
+            </div>
+
+            <!-- Delivery Form Section -->
+            <form class="delivery-form" id="delivery-form">
+                <label for="address">Delivery Address</label>
+                <input type="text" id="address" name="address" placeholder="Enter delivery address" required>
+
+                <label for="city">City</label>
+                <input type="text" id="city" name="city" placeholder="Enter city" required>
+
+                <label for="postal-code">Postal Code</label>
+                <input type="number" id="postal-code" name="postal-code" placeholder="Postal code" required>
+
+                <label for="country">Country</label>
+                <input type="text" id="country" name="country" placeholder="Enter country" required>
+
+                <label for="location-description">Location Description (Optional)</label>
+                <textarea id="location-description" name="location-description" placeholder="Provide any additional information (e.g., building, floor, landmark)."></textarea>
+
+                <p id="deliver">Delivery might take 3 to 7 days.</p>
+
+                <button type="submit" id="continue-to-payment">Continue to Payment</button>
+            </form>
+
+            <!-- Payment Form Section -->
+            <form class="payment-form" id="payment-form">
+                <label for="cardholder-name">Account Name</label>
+                <input type="text" id="cardholder-name" name="cardholder-name" required>
+
+                <label for="card-number">Card/Account Number</label>
+                <input type="number" id="card-number" name="card-number" placeholder="1234 5678 1234 5678" required>
+
+                <label for="expiration-date">Expiration Date</label>
+                <input type="date" id="expiration-date" name="expiration-date"  required>
+
+                <label for="cvv">CVV</label>
+                <input type="number" id="cvv" name="cvv" required>
+
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="example@mail.com" required>
+
+                <div class="icons">
+                  <img src="visa.png" width="100px" height="30px">
+                    <img src="paypal.png" width="40px" height="40px">
+                    <img src="gcash.png" width="52px" height="40px">
+                    <img src="maya.png" width="40px" height="40px" style="border-radius: 20px;">
+                </div>
+
+                <button type="submit" id="pay-now">Pay Now</button>
+            </form>
+            <button type="button" id="back-to-cart" class="back-to-shop-btn">Cancel and return to cart</button>
+
+            <!-- Transaction Result Section -->
+            <div id="transaction-result" class="transaction-result" style="display: none;">
+                <h3 style="color: rgb(255, 255, 255); text-shadow:5px 5px 10px rgb(0, 0, 0)">Demo Checkout Completed</h3>
+                <p>Your demo order has been saved. This prototype does not process or charge real payments.</p>
+                <p id="deliver">Your order is being prepared.</p>
+                <p id="order-confirmation"></p>
+
+                <!-- Back to Shop Button -->
+                <button class="back-to-shop-btn" onclick="window.location.href='dashboard.html'">View my orders</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const currentUser = JSON.parse(localStorage.getItem('loggedInUser') || 'null');
+        const pendingOrder = JSON.parse(localStorage.getItem('pendingOrder') || 'null');
+        if (!currentUser || !pendingOrder || pendingOrder.username !== currentUser.username) {
+            window.location.replace(currentUser ? 'checkout.html' : 'login.html?returnTo=checkout.html');
+        }
+
+        // Handle delivery form submission
+        document.getElementById('delivery-form').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent form submission
+
+            // Hide delivery form and show payment form
+            document.getElementById('delivery-form').style.display = 'none';
+            document.getElementById('payment-form').style.display = 'flex';
+            document.getElementById('delivery-step').removeAttribute('aria-current');
+            document.getElementById('payment-step').setAttribute('aria-current', 'step');
+        });
+
+        // Handle payment form submission
+        document.getElementById('payment-form').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent form submission
+
+            // Simulate payment processing
+            setTimeout(() => {
+                const completedOrders = JSON.parse(localStorage.getItem('customerOrders') || '[]');
+                if (!completedOrders.some(order => order.id === pendingOrder.id)) {
+                    completedOrders.unshift({
+                        ...pendingOrder,
+                        status: 'Processing',
+                        paymentStatus: 'Demo',
+                        completedAt: new Date().toISOString()
+                    });
+                    localStorage.setItem('customerOrders', JSON.stringify(completedOrders));
+                }
+                localStorage.removeItem('pendingOrder');
+                localStorage.removeItem('cart');
+
+                // Hide payment form and show transaction result
+                document.getElementById('payment-form').style.display = 'none';
+                document.getElementById('transaction-result').style.display = 'block';
+                document.getElementById('back-to-cart').style.display = 'none';
+                document.getElementById('payment-step').removeAttribute('aria-current');
+                document.getElementById('order-confirmation').textContent =
+                    `Order ${pendingOrder.id} is now Processing. View it anytime in your customer dashboard.`;
+            }, 1500);
+        });
+
+        document.getElementById('back-to-cart').addEventListener('click', () => {
+            localStorage.removeItem('pendingOrder');
+            window.location.href = 'checkout.html';
+        });
+    </script>
+
+    <script src="cybex-motion.js"></script>
+</body>
+</html>
